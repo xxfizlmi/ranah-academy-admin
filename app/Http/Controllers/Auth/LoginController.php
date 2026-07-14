@@ -9,6 +9,7 @@ class LoginController extends Controller
 {
     public function index()
     {
+        $data = ['title','Ranah Academy Admin'];
         return view('Auth/index');
     }
 }
