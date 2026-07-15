@@ -27,7 +27,8 @@
             <li>
 
                 <a href="{{ route('dashboard') }}"
-                    class="flex items-center gap-3 rounded-lg bg-indigo-600 px-4 py-3 text-white">
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('dashboard') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('dashboard') ? 'page' : '' }}">
 
                     📊
 
@@ -40,7 +41,8 @@
             <li>
 
                 <a href="{{ route('users.index') }}"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('users.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('users.*') ? 'page' : '' }}">
 
                     👤
 
