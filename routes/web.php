@@ -15,6 +15,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::resource('courses', CourseController::class)->except(['show']);
 Route::resource('materials', MaterialController::class)->except(['show', 'create', 'edit']);
-Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::resource('certificates', CertificateController::class)->except(['show', 'create', 'edit']);
+Route::resource('reports', ReportController::class)->except(['show', 'create', 'edit']);
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
