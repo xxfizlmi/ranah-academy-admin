@@ -26,19 +26,19 @@
 
                 <div class="px-8 pb-8">
 
-                    <form action="" method="POST" class="space-y-5">
+                    <form action="{{ route('login.attempt') }}" method="POST" class="space-y-5">
 
                         @csrf
 
                         <div>
-                            <x-label for="username">
-                                Username
+                            <x-label for="email">
+                                Email
                             </x-label>
 
-                            <x-input id="username" name="username" type="text" placeholder="Masukkan username"
-                                autocomplete="username" required autofocus />
+                            <x-input id="email" name="email" type="email" placeholder="you@domain.com"
+                                autocomplete="email" required autofocus value="{{ old('email') }}" />
 
-                            @error('username')
+                            @error('email')
                                 <p class="mt-2 text-sm text-red-500">
                                     {{ $message }}
                                 </p>

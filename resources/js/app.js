@@ -1,5 +1,33 @@
 import Swal from "sweetalert2";
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    customClass: {
+        popup: "rounded-3xl border border-slate-200 bg-white shadow-xl",
+    },
+    didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+});
+
+const ConfirmDialog = Swal.mixin({
+    customClass: {
+        popup: "rounded-2xl",
+        title: "text-slate-800 text-xl font-bold",
+        htmlContainer: "text-slate-600",
+        confirmButton:
+            "rounded-lg bg-rose-600 px-5 py-2.5 font-medium text-white transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300",
+        cancelButton:
+            "mr-3 rounded-lg border border-slate-300 bg-white px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200",
+    },
+    buttonsStyling: false,
+});
+
 window.togglePassword = function (id, button) {
     const input = document.getElementById(id);
 
@@ -51,32 +79,13 @@ window.toggleSidebar = function (forceOpen) {
 };
 
 window.showToast = function (message, icon = "success") {
-    Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: icon,
-        title: message,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: {
-            popup: "rounded-3xl border border-slate-200 bg-white shadow-xl",
-        },
-        didOpen: (toast) => {
-            toast.addEventListener("mouseenter", Swal.stopTimer);
-            toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-    });
+    Toast.fire({ icon: icon, title: message });
 };
 
-window.confirmDelete = function (
-    event,
-    form,
-    message = "Tindakan ini tidak dapat dibatalkan.",
-) {
+window.confirmDelete = function (event, form, message = "Tindakan ini tidak dapat dibatalkan.") {
     event.preventDefault();
 
-    Swal.fire({
+    ConfirmDialog.fire({
         title: "Yakin?",
         text: message,
         icon: "warning",
@@ -84,20 +93,6 @@ window.confirmDelete = function (
         confirmButtonText: "Ya, hapus",
         cancelButtonText: "Batal",
         reverseButtons: true,
-        customClass: {
-            popup: "rounded-2xl",
-
-            title: "text-slate-800 text-xl font-bold",
-
-            htmlContainer: "text-slate-600",
-
-            confirmButton:
-                "rounded-lg bg-rose-600 px-5 py-2.5 font-medium text-white transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-300",
-
-            cancelButton:
-                "mr-3 rounded-lg border border-slate-300 bg-white px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200",
-        },
-        buttonsStyling: false,
     }).then((result) => {
         if (result.isConfirmed) {
             form.submit();
@@ -540,6 +535,16 @@ window.addEventListener("DOMContentLoaded", () => {
     const message = document.body.dataset.swalSuccess;
     if (message) {
         window.showToast(message, "success");
+    }
+
+    const error = document.body.dataset.swalError;
+    if (error) {
+        ConfirmDialog.fire({
+            icon: "error",
+            title: "Gagal",
+            text: error,
+            confirmButtonText: "Tutup",
+        });
     }
 
     document

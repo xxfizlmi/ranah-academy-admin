@@ -125,5 +125,15 @@
         </ul>
 
     </nav>
+    <div class="border-t border-slate-200 p-4">
+        @auth
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="button" onclick="confirmDelete(event, this.closest('form'), 'Yakin ingin keluar?')" class="w-full rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700">Keluar</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Masuk</a>
+        @endauth
+    </div>
     </div>
 </aside>

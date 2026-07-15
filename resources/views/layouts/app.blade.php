@@ -15,7 +15,9 @@
     @stack('styles')
 </head>
 
-<body class="bg-slate-100 text-slate-800 antialiased" @if(session('success')) data-swal-success="{{ e(session('success')) }}"@endif>
+<body class="bg-slate-100 text-slate-800 antialiased"
+    @if(session('success')) data-swal-success="{{ e(session('success')) }}" @endif
+    @if(session('error') || ($errors ?? null)?->any()) data-swal-error="{{ e(session('error') ?? ($errors->first() ?? '')) }}" @endif>
     <div class="min-h-screen">
         <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/40 md:hidden" onclick="toggleSidebar(false)"></div>
         <div class="md:flex">
