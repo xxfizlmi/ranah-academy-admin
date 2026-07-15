@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [LoginController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::resource('courses', CourseController::class)->except(['show']);
 Route::get('/materials', [MaterialController::class, 'index'])->name('materials.index');
 Route::get('/certificates', [CertificateController::class, 'index'])->name('certificates.index');
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

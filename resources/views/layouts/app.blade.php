@@ -9,12 +9,13 @@
     <meta name="description" content="Ranah Academy Admin">
     <meta name="author" content="Ranah Academy">
     <meta name="robots" content="noindex,nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 
-<body class="bg-slate-100 text-slate-800 antialiased">
+<body class="bg-slate-100 text-slate-800 antialiased" @if(session('success')) data-swal-success="{{ e(session('success')) }}"@endif>
     <div class="min-h-screen">
         <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-slate-900/40 md:hidden" onclick="toggleSidebar(false)"></div>
         <div class="md:flex">
