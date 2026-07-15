@@ -251,7 +251,139 @@ window.openEditCourseModal = function (button) {
     };
     openCourseModal("edit", url, course);
 };
+window.openMaterialModal = function (mode, url, material = {}) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    if (!url || !csrfToken) {
+        window.showToast("Tidak dapat memproses request saat ini.", "error");
+        return;
+    }
 
+    const pageTitle = mode === "edit" ? "Edit Materi" : "Tambah Materi";
+
+    Swal.fire({
+        title: pageTitle,
+        width: "min(90vw, 560px)",
+        html: ` <div class="space-y-5 text-left">
+                <div>
+                    <label for="swal-material-title" class="mb-2 block text-sm font-medium text-slate-700">Judul Materi</label>
+                    <input id="swal-material-title" type="text" value="${escapeHtml(material.title ?? "")}" placeholder="Masukkan judul materi" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+                </div>
+
+                <div>
+                    <label for="swal-material-slug" class="mb-2 block text-sm font-medium text-slate-700">Slug</label>
+                    <input id="swal-material-slug" type="text" value="${escapeHtml(material.slug ?? "")}" placeholder="slug-materi-penting" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Status</label>
+                    <select id="swal-material-status" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+                        <option value="draft" ${material.status === "draft" ? "selected" : ""}>Draft</option>
+                        <option value="published" ${material.status === "published" ? "selected" : ""}>Published</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Deskripsi</label>
+                    <textarea id="swal-material-description" rows="5" class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">${escapeHtml(material.description ?? "")}</textarea>
+                </div>
+            </div>`,
+        showCancelButton: true,
+        confirmButtonText: mode === "edit" ? "Perbarui" : "Simpan",
+        cancelButtonText: "Batal",
+        focusConfirm: false,
+        customClass: {
+            popup: "rounded-3xl border border-slate-200",
+            confirmButton: "bg-indigo-600 text-white hover:bg-indigo-700",
+            cancelButton: "bg-slate-100 text-slate-700 hover:bg-slate-200",
+        },
+        didOpen: () => {
+            document.getElementById("swal-material-title").focus();
+        },
+        preConfirm: () => {
+            const title = document
+                .getElementById("swal-material-title")
+                .value.trim();
+            const slug = document
+                .getElementById("swal-material-slug")
+                .value.trim();
+            const status = document.getElementById("swal-material-status").value;
+            const description = document
+                .getElementById("swal-material-description")
+                .value.trim();
+
+            if (!title || !slug) {
+                Swal.showValidationMessage(
+                    "Judul dan slug harus diisi.",
+                );
+                return false;
+            }
+
+            return { title, slug, status, description };
+        },
+    }).then((result) => {
+        if (!result.isConfirmed || !result.value) {
+            return;
+        }
+
+        fetch(url, {
+            method: mode === "edit" ? "PUT" : "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+                Accept: "application/json",
+            },
+            body: JSON.stringify(result.value),
+        })
+            .then(async (response) => {
+                const data = await response.json().catch(() => null);
+                if (!response.ok) {
+                    const message = data?.message || "Gagal menyimpan materi.";
+                    throw new Error(message);
+                }
+                return data;
+            })
+            .then((data) => {
+                window.showToast(
+                    data.message ||
+                        (mode === "edit"
+                            ? "Materi berhasil diperbarui."
+                            : "Materi berhasil ditambahkan."),
+                    "success",
+                );
+                setTimeout(() => window.location.reload(), 800);
+            })
+            .catch((error) => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text:
+                        error.message ||
+                        "Terjadi kesalahan saat menyimpan materi.",
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton:
+                            "bg-indigo-600 text-white hover:bg-indigo-700",
+                    },
+                    buttonsStyling: false,
+                });
+            });
+    });
+};
+
+window.openAddMaterialModal = function (button) {
+    openMaterialModal("create", button?.dataset?.materialStoreUrl);
+};
+
+window.openEditMaterialModal = function (button) {
+    const url = button?.dataset?.materialUpdateUrl;
+    const material = {
+        title: button?.dataset?.materialTitle || "",
+        slug: button?.dataset?.materialSlug || "",
+        status: button?.dataset?.materialStatus || "draft",
+        description: button?.dataset?.materialDescription || "",
+    };
+    openMaterialModal("edit", url, material);
+};
 function escapeHtml(value) {
     return String(value || "")
         .replace(/&/g, "&amp;")
