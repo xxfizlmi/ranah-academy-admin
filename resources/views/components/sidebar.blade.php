@@ -54,8 +54,9 @@
 
             <li>
 
-                <a href="#"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                <a href="{{ route('courses.index') }}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('courses.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('courses.*') ? 'page' : '' }}">
 
                     📚
 
@@ -67,8 +68,9 @@
 
             <li>
 
-                <a href="#"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                <a href="{{ route('materials.index') }}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('materials.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('materials.*') ? 'page' : '' }}">
 
                     📝
 
@@ -80,8 +82,9 @@
 
             <li>
 
-                <a href="#"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                <a href="{{ route('certificates.index') }}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('certificates.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('certificates.*') ? 'page' : '' }}">
 
                     🎓
 
@@ -93,8 +96,9 @@
 
             <li>
 
-                <a href="#"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                <a href="{{ route('reports.index') }}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('reports.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('reports.*') ? 'page' : '' }}">
 
                     📈
 
@@ -106,8 +110,9 @@
 
             <li>
 
-                <a href="#"
-                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-700 transition hover:bg-slate-100">
+                <a href="{{ route('settings.index') }}"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 transition {{ request()->routeIs('settings.*') ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100' }}"
+                    aria-current="{{ request()->routeIs('settings.*') ? 'page' : '' }}">
 
                     ⚙️
 
